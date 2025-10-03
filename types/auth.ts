@@ -1,6 +1,6 @@
 // types/auth.ts
 
-export type AuthUser = {
+export interface User {
   id: string;
   email?: string;
   phone?: string;

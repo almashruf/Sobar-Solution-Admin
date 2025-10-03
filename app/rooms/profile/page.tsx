@@ -30,7 +30,6 @@ export default function ProfilePage() {
   const { toast } = useToast();
 
   const handleSave = () => {
-    // Update in Zustand store
     useAuthStore
       .getState()
       .setCredentials({
@@ -39,7 +38,6 @@ export default function ProfilePage() {
       });
     setIsEditing(false);
     
-    // Show success toast
     showToast.success("Profile updated successfully");
   };
 

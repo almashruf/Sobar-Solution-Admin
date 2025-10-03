@@ -4,7 +4,7 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
   async rewrites() {
-    // Only enable proxy if NEXT_PUBLIC_USE_PROXY is true
+
     if (process.env.NEXT_PUBLIC_USE_PROXY === "true") {
       return [
         {

@@ -19,7 +19,6 @@ export const useCurrentUser = () => {
       const response = await api.get<{ user: User }>("/auth/me");
       const user = response.data.user;
 
-      // onSuccess logic inside queryFn
       if (token) {
         setCredentials({ user, token });
       }
@@ -27,7 +26,7 @@ export const useCurrentUser = () => {
       return user;
     },
     retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    enabled: !!token, // Only run the query if we have a token
+    staleTime: 5 * 60 * 1000,
+    enabled: !!token,
   });
 };

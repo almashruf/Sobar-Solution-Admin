@@ -18,20 +18,20 @@ export const useRooms = () => {
     queryFn: async () => {
       if (!token) throw new Error("Not authenticated");
 
-      // Use the correct API endpoint with pagination and prevent caching
-      const response = await api.get("/rooms/?page=1&limit=10", {
+      // ✅ Correct API endpoint
+      const response = await api.get("/api/v1/rooms/", {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
       });
+
       const data = response.data;
 
-      // normalize response
-      if (data?.data?.rooms) return data.data.rooms;
-      if (data?.rooms) return data.rooms;
+      // ✅ Normalize response
+      if (Array.isArray(data?.rooms)) return data.rooms;
       if (Array.isArray(data)) return data;
 
       throw new Error("Unexpected rooms response format");
@@ -39,6 +39,6 @@ export const useRooms = () => {
     staleTime: 0,
     refetchOnMount: "always",
     refetchOnWindowFocus: false,
-    enabled: !!token, // Only run the query if we have a token
+    enabled: !!token,
   });
 };
