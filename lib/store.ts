@@ -1,4 +1,3 @@
-// store.ts - Consolidated auth store
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -15,6 +14,7 @@ interface AuthState {
   user: User | null;
   setCredentials: (data: { token: string; user: User | null }) => void;
   logout: () => void;
+  setToken: (token: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,8 +22,15 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
-      setCredentials: ({ token, user }) => set({ token, user }),
-      logout: () => set({ token: null, user: null }),
+      setCredentials: ({ token, user }) => {
+        set({ token, user });
+      },
+      logout: () => {
+        set({ token: null, user: null });
+      },
+      setToken: (token) => {
+        set({ token });
+      },
     }),
     {
       name: "auth-storage",
@@ -35,5 +42,4 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
-// getter to access store outside hooks
 export const getAuthStore = () => useAuthStore.getState();

@@ -1,8 +1,7 @@
 "use client";
-
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store";
-import api from "@/lib/axiosClient";
+import { apiClient } from "@/lib/api-client";
 
 export interface Room {
   id: number;
@@ -10,35 +9,36 @@ export interface Room {
   status: "active" | "inactive" | string;
 }
 
-export const useRooms = () => {
+interface RoomsResponse {
+  rooms: Room[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export const useRooms = (page = 1, limit = 10) => {
   const token = useAuthStore((state) => state.token);
 
-  return useQuery<Room[], Error>({
-    queryKey: ["rooms", token],
+  return useQuery<RoomsResponse, Error>({
+    queryKey: ["rooms", token, page, limit],
     queryFn: async () => {
       if (!token) throw new Error("Not authenticated");
 
-      // ✅ Correct API endpoint
-      const response = await api.get("/api/v1/rooms/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
+      const response = await apiClient.get(`/rooms`, {
+        params: { page, limit },
       });
+
+      console.log(response.data)
 
       const data = response.data;
 
-      // ✅ Normalize response
-      if (Array.isArray(data?.rooms)) return data.rooms;
-      if (Array.isArray(data)) return data;
+      if (data?.rooms && Array.isArray(data.rooms)) return data;
+      if (Array.isArray(data)) {
+        return { rooms: data, total: data.length, page, limit };
+      }
 
       throw new Error("Unexpected rooms response format");
     },
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: false,
     enabled: !!token,
   });
 };
