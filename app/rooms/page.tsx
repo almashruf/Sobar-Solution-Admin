@@ -11,13 +11,11 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function RoomsPage() {
   const [page, setPage] = useState(1);
-  const limit = 10;
 
-  const { data, isLoading, error } = useRooms(page, limit);
+  const { data, isLoading, error } = useRooms(page);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -46,7 +44,6 @@ export default function RoomsPage() {
 
   const rooms = data?.rooms || [];
   const total = data?.total || 0;
-  const totalPages = Math.ceil(total / limit);
 
   return (
     <div className="space-y-6 p-6">
@@ -84,27 +81,6 @@ export default function RoomsPage() {
             )}
           </TableBody>
         </Table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-between items-center pt-4">
-        <Button
-          variant="outline"
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-        >
-          Previous
-        </Button>
-        <span>
-          Page {page} of {totalPages || 1}
-        </span>
-        <Button
-          variant="outline"
-          disabled={page >= totalPages}
-          onClick={() => setPage((p) => p + 1)}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );

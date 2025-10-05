@@ -30,14 +30,12 @@ export default function ProfilePage() {
   const { toast } = useToast();
 
   const handleSave = () => {
-    useAuthStore
-      .getState()
-      .setCredentials({
-        user: { ...user, ...formData },
-        token: useAuthStore.getState().token,
-      });
+    useAuthStore.getState().setCredentials({
+      user: { ...user, ...formData },
+      token: useAuthStore.getState().token,
+    });
     setIsEditing(false);
-    
+
     showToast.success("Profile updated successfully");
   };
 
@@ -117,27 +115,14 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <div className="flex items-center space-x-2">
-                <Shield className="h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="role"
-                  value={formData.role}
-                  disabled
-                  className="bg-secondary border-border"
-                />
-              </div>
-            </div>
-
             {isEditing && (
               <div className="flex items-center space-x-2 pt-4">
                 <Button onClick={handleSave}>
                   <Save className="mr-2 h-4 w-4" />
                   Save Changes
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setIsEditing(false);
                     showToast.info("Edit cancelled");

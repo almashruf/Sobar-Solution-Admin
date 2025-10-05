@@ -12,11 +12,6 @@ const menuItems = [
     icon: Building2,
   },
   {
-    title: "Dashboard",
-    href: "/rooms/dashboard",
-    icon: Home,
-  },
-  {
     title: "Profile",
     href: "/rooms/profile",
     icon: User,
